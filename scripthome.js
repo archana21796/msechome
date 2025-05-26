@@ -27,19 +27,21 @@ document.addEventListener('DOMContentLoaded', () => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const counter = entry.target;
-        const target = +counter.getAttribute('data-target');
+        const target = parseFloat(counter.getAttribute('data-target'));
+        const suffix = counter.getAttribute('data-suffix') || '';
         const duration = 2000;
         const stepTime = 50;
-        const increment = target / (duration / stepTime);
+        const steps = duration / stepTime;
         let count = 0;
+        const increment = target / steps;
 
         const updateCounter = () => {
           count += increment;
           if (count < target) {
-            counter.textContent = Math.floor(count);
+            counter.textContent = ((target % 1 !== 0) ? count.toFixed(2) : Math.floor(count)) + suffix;
             setTimeout(updateCounter, stepTime);
           } else {
-            counter.textContent = target;
+            counter.textContent = target + suffix;
           }
         };
 
@@ -51,6 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   counters.forEach(counter => observer.observe(counter));
 });
+
+
 
 // Initialize Carousels
 document.addEventListener('DOMContentLoaded', () => {
